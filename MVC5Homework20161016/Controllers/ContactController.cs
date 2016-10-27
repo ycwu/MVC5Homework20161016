@@ -57,9 +57,19 @@ namespace MVC5Homework20161016.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.客戶聯絡人.Add(客戶聯絡人);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //var check = db.客戶聯絡人.Where(c => c.Email == 客戶聯絡人.Email);
+                //if (check.Count() == 0)
+                //{
+                客戶聯絡人.是否已刪除 = false;
+                    db.客戶聯絡人.Add(客戶聯絡人);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                //}
+               // else
+                //{
+                    //ModelState.AddModelError("Email", "輸入Email位置重覆");
+                //}
+                
             }
 
             ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);

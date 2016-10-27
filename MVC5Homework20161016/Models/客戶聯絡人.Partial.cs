@@ -5,8 +5,33 @@ namespace MVC5Homework20161016.Models
     using System.ComponentModel.DataAnnotations;
     
     [MetadataType(typeof(客戶聯絡人MetaData))]
-    public partial class 客戶聯絡人
+    public partial class 客戶聯絡人 : IValidatableObject
     {
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            //if (validationContext.Items.Count > 0)
+            //{
+                客戶資料Entities db = new 客戶資料Entities();
+                客戶聯絡人 contact1 = (客戶聯絡人)validationContext.ObjectInstance;
+                var e = db.客戶聯絡人.SqlQuery("SELECT * FROM 客戶聯絡人 WHERE Email=@p0", this.Email).GetEnumerator();
+                while (e.MoveNext())
+                {
+                    var value = e.Current;
+                    if (value.Email != "")
+                        yield return new ValidationResult("Email已重覆", new string[] { "Email" });
+                }
+            //}   
+            yield break;
+        }
+
+        static void Write(IEnumerator<客戶聯絡人> e)
+        {
+            while (e.MoveNext())
+            {
+                var value = e.Current;
+                Console.WriteLine(value);
+            }
+        }
     }
     
     public partial class 客戶聯絡人MetaData
