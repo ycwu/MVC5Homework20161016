@@ -3,24 +3,31 @@ namespace MVC5Homework20161016.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     
     [MetadataType(typeof(客戶聯絡人MetaData))]
     public partial class 客戶聯絡人 : IValidatableObject
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            //if (validationContext.Items.Count > 0)
-            //{
-                客戶資料Entities db = new 客戶資料Entities();
-                客戶聯絡人 contact1 = (客戶聯絡人)validationContext.ObjectInstance;
-                var e = db.客戶聯絡人.SqlQuery("SELECT * FROM 客戶聯絡人 WHERE Email=@p0", this.Email).GetEnumerator();
-                while (e.MoveNext())
+            var db = new 客戶資料Entities();
+            if (this.Id == 0)
+            {
+                //Create
+                if (db.客戶聯絡人.Where(p => p.客戶Id == this.客戶Id && p.Email == this.Email).Any())
                 {
-                    var value = e.Current;
-                    if (value.Email != "")
-                        yield return new ValidationResult("Email已重覆", new string[] { "Email" });
+                    yield return new ValidationResult("Email已存在", new string[] { Email });
                 }
-            //}   
+                else
+                {
+                    //Update
+                    if (db.客戶聯絡人.Where(p => p.客戶Id == this.客戶Id && p.Email == this.Email).Any())
+                    {
+                        yield return new ValidationResult("Email已存在", new string[] { Email });
+                    }
+                }
+            }
+       
             yield break;
         }
 
