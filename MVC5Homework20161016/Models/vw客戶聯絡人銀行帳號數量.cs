@@ -14,6 +14,7 @@ namespace MVC5Homework20161016.Models
     
     public partial class vw客戶聯絡人銀行帳號數量
     {
+        public int Id { get; set; }
         public string 客戶名稱 { get; set; }
         public Nullable<int> 聯絡人數量 { get; set; }
         public Nullable<int> 銀行帳戶數量 { get; set; }

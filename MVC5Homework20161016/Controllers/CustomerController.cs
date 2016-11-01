@@ -24,16 +24,13 @@ namespace MVC5Homework1016.Controllers
         //}
 
         // GET: Customer
-        public ActionResult Index(string search = "")
+        public ActionResult Index(string search = "",string 分類 = "")
         {
             var options = (from p in repo.All() select p.分類).Distinct().OrderBy(p => p).ToList();
             ViewBag.分類 = new SelectList(options);
 
-            var data = repo.All().OrderByDescending(p => p.Id).ToList();
-            if (!string.IsNullOrEmpty(search))
-                return View(data.Where(c => c.客戶名稱.Contains(search)).Where(c => c.是否已刪除.Equals(false)));   //
-            else
-                return View(data.Where(c => c.是否已刪除 == false).ToList());
+            var data = repo.Filter(search, 分類).ToList();
+            return View(data.ToList());
         }
 
         // GET: Customer/Details/5

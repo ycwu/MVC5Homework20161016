@@ -45,6 +45,17 @@
           <Property Name="電話" Type="nvarchar" MaxLength="50" />
           <Property Name="是否已刪除" Type="bit" Nullable="false" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'C:\USERS\WU\SOURCE\REPOS\MVC5HOMEWORK20161016\MVC5HOMEWORK20161016\APP_DATA\客戶資料.MDF.dbo.vw客戶聯絡人銀行帳號數量' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="vw客戶聯絡人銀行帳號數量">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="客戶名稱" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="聯絡人數量" Type="int" />
+          <Property Name="銀行帳戶數量" Type="int" />
+        </EntityType>
         <Association Name="FK_客戶銀行資訊_客戶資料">
           <End Role="客戶資料" Type="Self.客戶資料" Multiplicity="1" />
           <End Role="客戶銀行資訊" Type="Self.客戶銀行資訊" Multiplicity="*" />
@@ -73,6 +84,14 @@
           <EntitySet Name="客戶資料" EntityType="Self.客戶資料" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="客戶銀行資訊" EntityType="Self.客戶銀行資訊" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="客戶聯絡人" EntityType="Self.客戶聯絡人" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vw客戶聯絡人銀行帳號數量" EntityType="Self.vw客戶聯絡人銀行帳號數量" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vw客戶聯絡人銀行帳號數量].[Id] AS [Id], 
+    [vw客戶聯絡人銀行帳號數量].[客戶名稱] AS [客戶名稱], 
+    [vw客戶聯絡人銀行帳號數量].[聯絡人數量] AS [聯絡人數量], 
+    [vw客戶聯絡人銀行帳號數量].[銀行帳戶數量] AS [銀行帳戶數量]
+    FROM [dbo].[vw客戶聯絡人銀行帳號數量] AS [vw客戶聯絡人銀行帳號數量]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_客戶銀行資訊_客戶資料" Association="Self.FK_客戶銀行資訊_客戶資料">
             <End Role="客戶資料" EntitySet="客戶資料" />
             <End Role="客戶銀行資訊" EntitySet="客戶銀行資訊" />
@@ -170,8 +189,9 @@
         </EntityContainer>
         <EntityType Name="vw客戶聯絡人銀行帳號數量">
           <Key>
-            <PropertyRef Name="客戶名稱" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="客戶名稱" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="聯絡人數量" Type="Int32" />
           <Property Name="銀行帳戶數量" Type="Int32" />
@@ -222,6 +242,16 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="手機" ColumnName="手機" />
                 <ScalarProperty Name="電話" ColumnName="電話" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw客戶聯絡人銀行帳號數量">
+            <EntityTypeMapping TypeName="CustomerModel.vw客戶聯絡人銀行帳號數量">
+              <MappingFragment StoreEntitySet="vw客戶聯絡人銀行帳號數量">
+                <ScalarProperty Name="銀行帳戶數量" ColumnName="銀行帳戶數量" />
+                <ScalarProperty Name="聯絡人數量" ColumnName="聯絡人數量" />
+                <ScalarProperty Name="客戶名稱" ColumnName="客戶名稱" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
