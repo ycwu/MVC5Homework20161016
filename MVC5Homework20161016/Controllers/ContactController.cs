@@ -16,7 +16,7 @@ namespace MVC5Homework20161016.Controllers
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: Contact
-        public ActionResult Index(string search, string titles)
+        public ActionResult Index(string search, string titles, string sortOrder)
         {
             var data = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(c => c.是否已刪除 == false);
             if (!string.IsNullOrEmpty(search))
@@ -24,6 +24,12 @@ namespace MVC5Homework20161016.Controllers
             if (!string.IsNullOrEmpty(titles))
                 data = data.Where(c => c.職稱.Contains(titles));
 
+            switch (sortOrder)
+            {
+                case "職稱":
+                    data = data.OrderBy(c => c.職稱);
+                    break;
+            }
             return View(data.ToList());
         }
 
