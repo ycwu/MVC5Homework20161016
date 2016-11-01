@@ -16,13 +16,14 @@ namespace MVC5Homework20161016.Controllers
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: Contact
-        public ActionResult Index(string search)
+        public ActionResult Index(string search, string titles)
         {
-            var data = db.客戶聯絡人.Include(客 => 客.客戶資料);
+            var data = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(c => c.是否已刪除 == false);
             if (!string.IsNullOrEmpty(search))
-                data = data.Where(c => c.姓名.Contains(search)).Where(c => c.是否已刪除 == false);
-            else
-                data = data.Where(c => c.是否已刪除 == false);
+                data = data.Where(c => c.姓名.Contains(search));
+            if (!string.IsNullOrEmpty(titles))
+                data = data.Where(c => c.職稱.Contains(titles));
+
             return View(data.ToList());
         }
 

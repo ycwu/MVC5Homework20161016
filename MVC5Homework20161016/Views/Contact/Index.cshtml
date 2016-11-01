@@ -10,9 +10,9 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 <form action="">
-    姓名：
-    <input name="search" type="text" value="" />
-    <input type="button" value="搜尋" />
+    姓名：@Html.TextBox("search")
+    職稱：@Html.TextBox("titles")
+    <input type="submit" value="搜尋" />
 </form>
 <table class="table">
     <tr>
