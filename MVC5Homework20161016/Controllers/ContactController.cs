@@ -18,16 +18,52 @@ namespace MVC5Homework20161016.Controllers
         // GET: Contact
         public ActionResult Index(string search, string titles, string sortOrder)
         {
-            var data = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(c => c.是否已刪除 == false);
+            var data = db.客戶聯絡人.Include(客 => 客.客戶資料).OrderBy(c => c.職稱).Where(c => c.是否已刪除 == false);
             if (!string.IsNullOrEmpty(search))
                 data = data.Where(c => c.姓名.Contains(search));
             if (!string.IsNullOrEmpty(titles))
                 data = data.Where(c => c.職稱.Contains(titles));
 
+            ViewBag.sort職稱 = String.IsNullOrEmpty(sortOrder) ? "職稱_DESC" : "";
+            ViewBag.sort姓名 = sortOrder == "姓名" ? "姓名_DESC" : "姓名";
+            ViewBag.sortEmail = sortOrder == "Email" ? "Email_DESC" : "Email";
+            ViewBag.sort手機 = sortOrder == "手機" ? "手機_DESC" : "手機";
+            ViewBag.sort電話 = sortOrder == "電話" ? "電話_DESC" : "電話";
+            ViewBag.sort客戶名稱 = sortOrder == "客戶名稱" ? "客戶名稱_DESC" : "客戶名稱";
             switch (sortOrder)
             {
-                case "職稱":
-                    data = data.OrderBy(c => c.職稱);
+                case "職稱_DESC":
+                    data = data.OrderByDescending(c => c.職稱);
+                    break;
+                case "姓名":
+                    data = data.OrderBy(c => c.姓名);
+                    break;
+                case "姓名_DESC":
+                    data = data.OrderByDescending(c => c.姓名);
+                    break;
+                case "Email":
+                    data = data.OrderBy(c => c.Email);
+                    break;
+                case "Email_DESC":
+                    data = data.OrderByDescending(c => c.Email);
+                    break;
+                case "手機":
+                    data = data.OrderBy(c => c.手機);
+                    break;
+                case "手機_DESC":
+                    data = data.OrderByDescending(c => c.手機);
+                    break;
+                case "電話":
+                    data = data.OrderBy(c => c.電話);
+                    break;
+                case "電話_DESC":
+                    data = data.OrderByDescending(c => c.電話);
+                    break;
+                case "客戶名稱":
+                    data = data.OrderBy(c => c.客戶資料.客戶名稱);
+                    break;
+                case "客戶名稱_DESC":
+                    data = data.OrderByDescending(c => c.客戶資料.客戶名稱);
                     break;
             }
             return View(data.ToList());
