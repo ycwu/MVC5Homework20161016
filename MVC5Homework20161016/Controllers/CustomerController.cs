@@ -15,13 +15,13 @@ namespace MVC5Homework1016.Controllers
     {
         //private 客戶資料Entities db = new 客戶資料Entities();
         客戶資料Repository repo=RepositoryHelper.Get客戶資料Repository();
-        //vw客戶聯絡人銀行帳號數量 repo1 = RepositoryHelper.Getvw客戶聯絡人銀行帳號數量Repository();
+        vw客戶聯絡人銀行帳號數量Repository repo1 = RepositoryHelper.Getvw客戶聯絡人銀行帳號數量Repository();
 
-        //public ActionResult List()
-        //{
-        //    var data = repo1.vw客戶聯絡人銀行帳號數量;            
-        //    return View(data.ToList());
-        //}
+        public ActionResult List()
+        {
+            var data = repo1.All();
+            return View(data.ToList());
+        }
 
         // GET: Customer
         public ActionResult Index(string search = "",string 分類 = "")

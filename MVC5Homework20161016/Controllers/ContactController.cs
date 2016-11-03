@@ -8,12 +8,57 @@ using System.Web;
 using System.Web.Mvc;
 using MVC5Homework20161016.Models;
 using System.Data.Entity.Validation;
+using System.IO;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace MVC5Homework20161016.Controllers
 {
     public class ContactController : Controller
     {
         private 客戶資料Entities db = new 客戶資料Entities();
+
+        public FileResult Export()
+        {
+            var data = db.客戶聯絡人;
+            //讀取樣板
+            string ExcelPath = Server.MapPath("~/Export.xlsx");
+            FileStream Template = new FileStream(ExcelPath, FileMode.Open, FileAccess.Read);
+            IWorkbook workbook = new XSSFWorkbook(Template);
+            Template.Close();
+
+            ISheet _sheet = workbook.GetSheetAt(0);
+            //取得剛剛在Excel設定的字型 (第二列首欄)
+            ICellStyle CellStyle = _sheet.GetRow(1).Cells[0].CellStyle;
+
+            int CurrRow = 1;    //起始列(跳過標題列)
+            foreach (var item in data)
+            {
+                IRow MyRow = _sheet.CreateRow(CurrRow);
+                CreateCell(item.Id.ToString(), MyRow, 0, CellStyle);
+                CreateCell(item.客戶Id.ToString(), MyRow, 1, CellStyle);
+                CreateCell(item.職稱.ToString(), MyRow, 2, CellStyle);
+                CreateCell(item.姓名.ToString(), MyRow, 3, CellStyle);
+                CreateCell(item.Email.ToString(), MyRow, 4, CellStyle);
+                CreateCell(item.手機.ToString(), MyRow, 5, CellStyle);
+                CreateCell(item.電話.ToString(), MyRow, 6, CellStyle);
+                CreateCell(item.是否已刪除.ToString(), MyRow, 7, CellStyle);
+            }
+
+            string SavePath = @"d:\test.xlsx";
+            FileStream file = new FileStream(SavePath, FileMode.Create);
+            workbook.Write(file);
+            file.Close();
+
+            return File(SavePath, "application/excel", "Report.xlsx");
+        }
+
+        private static void CreateCell(string Word, IRow ContentRow, int CellIndex, ICellStyle cellStyleBoder)
+        {
+            ICell _cell = ContentRow.CreateCell(CellIndex);
+            _cell.SetCellValue(Word);
+            _cell.CellStyle = cellStyleBoder;
+        }
 
         // GET: Contact
         public ActionResult Index(string search, string titles, string sortOrder)
