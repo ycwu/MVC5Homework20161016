@@ -13,9 +13,10 @@ namespace MVC5Homework1016.Controllers
 {
     public class CustomerController : Controller
     {
-        //private 客戶資料Entities db = new 客戶資料Entities();
+        private 客戶資料Entities db = new 客戶資料Entities();
         客戶資料Repository repo=RepositoryHelper.Get客戶資料Repository();
         vw客戶聯絡人銀行帳號數量Repository repo1 = RepositoryHelper.Getvw客戶聯絡人銀行帳號數量Repository();
+        客戶聯絡人 dbContact = new 客戶聯絡人();
 
         public ActionResult List()
         {
@@ -140,7 +141,7 @@ namespace MVC5Homework1016.Controllers
                 }
             }
             return RedirectToAction("Index");
-        }
+        }        
 
         protected override void Dispose(bool disposing)
         {

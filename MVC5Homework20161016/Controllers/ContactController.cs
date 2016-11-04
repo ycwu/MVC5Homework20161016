@@ -18,6 +18,44 @@ namespace MVC5Homework20161016.Controllers
     {
         private 客戶資料Entities db = new 客戶資料Entities();
 
+        //[LocalDebugOnly] ??
+        [HandleError(ExceptionType = typeof(DbEntityValidationException), View = "Error_DbEntityValidationException")]
+
+        public ActionResult NewIndex()
+        {
+            return View();
+        }
+        public ActionResult ContactList()
+        {
+           /*
+            * 預設輸出的欄位名稱格式：item.ProductId
+            * 要改成以下欄位格式：
+            * items[0].ProductId
+            * items[1].ProductId
+            */
+            var data = db.客戶聯絡人;
+            return View(data);
+        }
+        public ActionResult BatchUpdate(CustomerBatchUpdateViewModel[] items)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var item in items) //?? items=null
+                {
+                    客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(item.Id);
+                    客戶聯絡人.客戶Id = item.客戶Id;
+                    客戶聯絡人.職稱 = item.職稱;
+                    客戶聯絡人.姓名 = item.姓名;
+                    客戶聯絡人.Email = item.Email;
+                    客戶聯絡人.手機 = item.手機;
+                    客戶聯絡人.電話 = item.電話;
+                    客戶聯絡人.是否已刪除 = item.是否已刪除;
+                }
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
         public FileResult Export()
         {
             var data = db.客戶聯絡人;

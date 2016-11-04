@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MVC5Homework20161016.Models.客戶聯絡人>
+
+@{
+    ViewBag.Title = "ContactList";
+}
+
+<h2>ContactList</h2>
+
+@{
+    var items = Model.ToArray();
+}
+
+@using (Html.BeginForm("BatchUpdate", "Contact"))
+{
+    <table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.客戶Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.職稱)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.姓名)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.手機)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.電話)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.是否已刪除)
+        </th>
+    </tr>
+
+    @for (var i = 0; i < items.Length; i++)
+    {
+        @Html.HiddenFor(modelItem => items[i].Id)
+        <tr>
+            <td>
+                @Html.EditorFor(modelItem => items[i].客戶Id)
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => items[i].職稱)
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => items[i].姓名)
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => items[i].Email)
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => items[i].手機)
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => items[i].電話)
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => items[i].是否已刪除)
+            </td>
+        </tr>
+    }
+
+</table>
+
+<input type="submit" name="" value="批次更新" />
+}
